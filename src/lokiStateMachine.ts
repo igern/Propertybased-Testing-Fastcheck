@@ -33,7 +33,12 @@ class RemoveCommand implements fc.Command<SimpleDb, Collection<any>>{
 class SizeCommand implements fc.Command<SimpleDb, Collection<any>>{
     check = () => true
     run(model: SimpleDb, loki: Collection<any>): void {
-        assert.equal(model.count(), loki.count());
+        if(model.count() != loki.count()){
+            console.log(model.callStack);
+            model.assertionErrors +=  `${model.count()}:${loki.count()}\n`
+            console.log(model.assertionErrors);
+            assert.equal(model.count(), loki.count());
+        }
     }
     toString(): string {
         return `COUNT`
