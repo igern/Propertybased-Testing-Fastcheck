@@ -24,7 +24,7 @@ function remove(recordToRemove: object, database: SimpleDb) {
 
     if (single_entry_empty_variableName_fixed) {
         if (Object.keys(recordToRemove).length == 1) {
-            if (recordToRemove[""] != null) {
+            if (Object.keys(recordToRemove)[0] == "") {
                 database.data = [];
             }
         }
@@ -34,27 +34,26 @@ function remove(recordToRemove: object, database: SimpleDb) {
         database.data = [];
     }
     for (let i = database.data.length - 1; i >= 0; i--) {
+        let recordtr = JSON.stringify(recordToRemove);
+        let dbrecord = JSON.stringify(database.data[i]);
         if (JSON.stringify(recordToRemove) === JSON.stringify(database.data[i])) {
             if (name_starting_with_dot_fixed) {
-                Object.keys(recordToRemove).forEach(key => {
-                    if (key[0] != ".") {
-                        database.data.splice(i, 1);
-                    }
-                });
-            } else {
-                database.data.splice(i, 1);
+                if (Object.keys(recordToRemove).some(key => key.includes("."))) {
+                    continue // Skips object containg key with initial dot
+                }
             }
+            database.data.splice(i, 1);
         }
     }
 }
 
-var dummy = new SimpleDb();
-dummy.insert({ hello: "Holst" })
-dummy.insert({ ".": "" })
-//dummy.insert({ "_~Fv{`i*;": 496909701, "]@1;.*Ec)4": -1067086941 })
-console.log(dummy.data);
-dummy.remove({ "-": 0 })
-//dummy.remove({ "-": 0 })
-console.log(dummy.data);
-console.log(dummy.count());
+var db = new SimpleDb();
+db.insert({ "": null });
+db.count();
+db.insert({});
+db.count();
+db.count();
+db.remove({ "": null });
+db.count();
+console.log(db.count());
 

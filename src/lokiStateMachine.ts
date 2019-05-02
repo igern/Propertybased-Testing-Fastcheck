@@ -33,9 +33,9 @@ class RemoveCommand implements fc.Command<SimpleDb, Collection<any>>{
 class SizeCommand implements fc.Command<SimpleDb, Collection<any>>{
     check = () => true
     run(model: SimpleDb, loki: Collection<any>): void {
-        if(model.count() != loki.count()){
+        if (model.count() != loki.count()) {
             console.log(model.callStack);
-            model.assertionErrors +=  `${model.count()}:${loki.count()}\n`
+            model.assertionErrors += `${model.count()}:${loki.count()}\n`
             console.log(model.assertionErrors);
             assert.equal(model.count(), loki.count());
         }
@@ -56,11 +56,11 @@ describe('', () => {
     // string text always contains itself
     it('', () => {
         fc.assert(
-            fc.property(fc.commands(allCommands, 100), cmds => {
+            fc.property(fc.commands(allCommands, 1000), cmds => {
                 const s = () => ({ model: new SimpleDb(), real: new loki('loki.json').addCollection('testing') });
                 fc.modelRun(s, cmds);
             }), { verbose: true }
         )
-    }).timeout(10000)
+    }).timeout(1000000)
 });
 //seed: 1037837345, path: "2:2:2:4:3:4:5:4:9:7", endOnFailure: true,

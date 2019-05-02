@@ -12,9 +12,9 @@ export const betterObject: Arbitrary<Object> = fc.object().filter((o) => {
     return returning
 });
 
-fc.statistics(
-    betterObject,
-    v => Object.keys(v).length < 5 ? 'Small dictionary' : 'Big dictionary',
-    { numRuns: 10000, logger: console.log }
-);
+// fc.statistics(
+//     betterObject,
+//     v => Object.keys(v).length < 5 ? 'Small dictionary' : 'Big dictionary',
+//     { numRuns: 10000, logger: console.log }
+// );
 

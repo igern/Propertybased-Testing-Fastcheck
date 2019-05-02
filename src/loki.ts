@@ -1,12 +1,20 @@
 import * as loki from "lokijs";
 
-var db = new loki('loki.json');
+var database = new loki('loki.json');
 
-var children = db.addCollection('children');
-children.insert({ hello: "erg", ".hrthtr": "" })
-console.log(children.count());
-console.log(children.find({ hello: "erg", ".hrthtr": "" }))
-console.log(children.count());
+var db = database.addCollection('children');
+db.insert({ "": null });
+db.count();
+db.insert({ "kjrge": null })
+db.insert({});
+db.count();
+db.count();
+db.findAndRemove({ "": 5 });
+db.count();
+
+
+console.log(db.count());
+console.log(db.find({}))
 
 //console.log(children.find({ qty: 100, item: "paper", tags: ["red", "blank", "plain"] }))
 
