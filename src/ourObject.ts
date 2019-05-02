@@ -1,18 +1,5 @@
-import fc, { Arbitrary, json } from 'fast-check';
-import { array_Matching_Does_Not_Work_With_Remove_Fixed } from './bugs';
+import fc, { Arbitrary } from 'fast-check';
 
-export class OurObject extends Arbitrary<Object>{
-    generate(mrng: fc.Random): fc.Shrinkable<Object> {
-        let object = fc.object().generate(mrng).value;
-        Object.keys(object).forEach((key) => {
-            if (object[key] instanceof Array) {
-                object[key] = fc.string().generate(mrng).value;
-            }
-        })
-        console.log(object)
-        return object;
-    }
-}
 
 export const betterObject: Arbitrary<Object> = fc.object().filter((o) => {
     let returning = true
@@ -24,3 +11,10 @@ export const betterObject: Arbitrary<Object> = fc.object().filter((o) => {
     })
     return returning
 });
+
+fc.statistics(
+    betterObject,
+    v => Object.keys(v).length < 5 ? 'Small dictionary' : 'Big dictionary',
+    { numRuns: 10000, logger: console.log }
+);
+
