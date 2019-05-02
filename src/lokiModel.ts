@@ -3,9 +3,20 @@ import { single_entry_empty_variableName_fixed, name_starting_with_dot_fixed } f
 
 export class SimpleDb {
     data: object[] = []
-    insert = (record: object) => this.data.push(record);
-    remove = (record: object) => remove(record, this);
-    count = () => this.data.length
+    callStack: string = "CALLSTACK: ";
+    assertionErrors: string = "ASSERTION: ";
+    insert = (record: object) => {
+        this.callStack += `db.insert(${JSON.stringify(record)});\n`
+        this.data.push(record)
+    };
+    remove = (record: object) => {
+        this.callStack += `db.remove(${JSON.stringify(record)});\n`
+        remove(record, this)
+    };
+    count = () => {
+        this.callStack += `db.count();\n`
+        return this.data.length
+    }
 }
 
 function remove(recordToRemove: object, database: SimpleDb) {
