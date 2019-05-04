@@ -48,12 +48,5 @@ function remove(recordToRemove: object, database: SimpleDb) {
 }
 
 var db = new SimpleDb();
-db.insert({ "": null });
-db.count();
-db.insert({});
-db.count();
-db.count();
-db.remove({ "": null });
-db.count();
 console.log(db.count());
 

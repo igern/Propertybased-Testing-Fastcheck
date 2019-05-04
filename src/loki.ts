@@ -3,15 +3,6 @@ import * as loki from "lokijs";
 var database = new loki('loki.json');
 
 var db = database.addCollection('children');
-db.insert({ "": null });
-db.count();
-db.insert({ "kjrge": null })
-db.insert({});
-db.count();
-db.count();
-db.findAndRemove({ "": 5 });
-db.count();
-
 
 console.log(db.count());
 console.log(db.find({}))
