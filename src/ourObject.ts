@@ -58,13 +58,24 @@ export function bugString(): Arbitrary<string> {
 //     return returning
 // });
 
-// fc.statistics(
-//     ultimateObject(),
-//     v => Object.keys(v).length.toString(),
-//     { numRuns: 1000, logger: console.log }
-// );
+console.log("Statistics for average length of all keys in object")
+fc.statistics(
+    ultimateObject(),
+    v => Object.keys(v).length > 0 ? Math.floor((Object.keys(v).map((key) => key.length).reduce((a, b) => a + b, 0) / Object.keys(v).length)).toString()
+        : "0"
+    ,
+    { numRuns: 1000, logger: console.log }
+);
 
-console.log(fc.sample(ultimateObject(), 10))
+console.log("Statistics for size of each object")
+fc.statistics(
+    ultimateObject(),
+    v => (Math.floor(Object.keys(v).length / 10) * 10).toString() + "-" + (Math.floor(Object.keys(v).length / 10) * 10 + 10).toString(),
+    { numRuns: 1000, logger: console.log }
+);
+
+//console.log(fc.sample(fc.array(opject), 1))
+
 
 function toObject<T>(items: [string, T][]): { [key: string]: T } {
     const obj: { [key: string]: T } = {};
