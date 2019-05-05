@@ -56,26 +56,42 @@ function remove(recordToRemove: object, database: SimpleDb) {
 }
 
 function partialEquivalen(recordToRemove, record) {
+    if (Object.keys(record).length < 1) {
+        if (Object.keys(recordToRemove).length < 1) {
+            return true
+        } else return false
+    }
     return Object.keys(record).every((value, index, array) => {
         return value in recordToRemove && recordToRemove[value] == record[value]
     })
 }
 
+//console.log(partialEquivalen({ "\"": 1.7976931348623157e+308 }, {}))
 
 function min(field: string, database: SimpleDb) {
+    var isnan = false
     const values = []
     database.data.forEach((record) => {
-        if (record[field] != undefined) {
-            values.push(record[field])
+        if (field in record) {
+            if (Number.isNaN(Number(record[field])) || record[field] == null) {
+                isnan = true;
+            } else {
+                values.push(Number(record[field]))
+            }
         }
     })
-    return values.reduce((min, next) => next < min ? next : min, values[0]);
+    if (isnan) {
+        return Number.NaN
+    } else {
+        return values.reduce((min, next) => next < min ? next : min, values[0])
+    }
 }
 var db = new SimpleDb();
-db.insertMany([{}, { "\"": 1.7976931348623157e+308 }]);
+db.insert({ ";B": 0, "q": "X04rOZa#gl", "q:s*L": null, "}>jp3$;;": "y'W9", "6?": 0.8406658496645387, "ySZG/0EN": "GXDm`icl ", "U?": true });
+db.insert({});
 db.count();
 db.count();
-db.remove({ "\"": 1.7976931348623157e+308 });
-db.count();
+console.log(db.min("q"))
+console.log(db.data)
 
 
