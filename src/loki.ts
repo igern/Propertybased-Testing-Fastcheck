@@ -2,11 +2,30 @@ import * as loki from "lokijs";
 
 var database = new loki('loki.json');
 
+// var db = database.addCollection('children');
+// db.insert({ " ": null });
+// db.count();
+// db.count();
+// console.log(db.min(" "))
+
+// var db = database.addCollection('children');
+// db.insert({ "a": 3 })
+// db.insert({ "a": 2 })
+// db.insert({ "height": 160 })
+// console.log(db.minRecord("a"))
+
 var db = database.addCollection('children');
-db.insert({ "name": "mathies", "height": 160 })
-db.insert({ "name": "jonas", "height": 175 })
-db.insert({ "name": "daniel", "height": 174 })
-console.log(db.min("name"))
+db.insert({ "name": "Mathies", "height": { "lower": 150, "higher": 160 }, "intesterest": ["code", "eat", "sleep"] })
+db.insert({ "name": "Jonas", "height": { "lower": 175, "higher": 210 }, "intesterest": ["code", "eat", "sleep", "movies"] })
+db.insert({ "name": "Daniel", "height": { "lower": 173, "higher": 174 }, "intesterest": ["code", "eat", "sleep", "ardunio", "pizza"] })
+
+console.log(db.find({ "height.lower": 150 }))
+
+
+
+
+
+
 //console.log(children.find({ qty: 100, item: "paper", tags: ["red", "blank", "plain"] }))
 
 //console.log(children.find())

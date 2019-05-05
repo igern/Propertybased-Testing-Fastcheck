@@ -70,11 +70,15 @@ class MinCommand implements fc.Command<SimpleDb, Collection<any>>{
     check = (model: Readonly<SimpleDb>): boolean => model.count() > 0
     run(model: SimpleDb, loki: Collection<any>): void {
         this.record = model.data[Math.round(Math.random() * (model.count() - 1))]
-        this.field = Object.keys(this.record)[Math.round(Math.random() * (Object.keys(this.record).length - 1))];
+        if (Object.keys(this.record).length > 0) {
+            this.field = Object.keys(this.record)[Math.round(Math.random() * (Object.keys(this.record).length - 1))];
+        } else {
+            return
+        }
         var modelMin = model.min(this.field);
         var lokiMin = loki.min(this.field);
         if (Number.isNaN(modelMin) && Number.isNaN(lokiMin)) {
-            assert.true();
+            return
         } else if (modelMin != lokiMin) {
             console.log(model.callStack);
             model.assertionErrors += `${model.min(this.field)}:${loki.min(this.field)}\n`
@@ -82,6 +86,10 @@ class MinCommand implements fc.Command<SimpleDb, Collection<any>>{
             assert.equal(model.min(this.field), loki.min(this.field));
         }
     }
+    toString(): string {
+        return `MIN(${JSON.stringify(this.field)})`
+    }
+
 }
 
 const allCommands = [

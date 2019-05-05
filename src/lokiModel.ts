@@ -73,7 +73,7 @@ function min(field: string, database: SimpleDb) {
     const values = []
     database.data.forEach((record) => {
         if (field in record) {
-            if (Number.isNaN(Number(record[field])) || record[field] == null) {
+            if (Number.isNaN(Number(record[field]))) {
                 isnan = true;
             } else {
                 values.push(Number(record[field]))
