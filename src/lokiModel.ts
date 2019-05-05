@@ -1,4 +1,3 @@
-import { record } from "fast-check/*";
 import { single_entry_empty_variableName_fixed, name_starting_with_dot_fixed } from "./lokiBugs";
 
 export class SimpleDb {
@@ -28,8 +27,6 @@ export class SimpleDb {
 }
 
 function remove(recordToRemove: object, database: SimpleDb) {
-
-
     if (single_entry_empty_variableName_fixed) {
         if (Object.keys(recordToRemove).length == 1) {
             if (Object.keys(recordToRemove)[0] == "") {
@@ -66,8 +63,6 @@ function partialEquivalen(recordToRemove, record) {
     })
 }
 
-//console.log(partialEquivalen({ "\"": 1.7976931348623157e+308 }, {}))
-
 function min(field: string, database: SimpleDb) {
     var isnan = false
     const values = []
@@ -86,12 +81,5 @@ function min(field: string, database: SimpleDb) {
         return values.reduce((min, next) => next < min ? next : min, values[0])
     }
 }
-var db = new SimpleDb();
-db.insert({ ";B": 0, "q": "X04rOZa#gl", "q:s*L": null, "}>jp3$;;": "y'W9", "6?": 0.8406658496645387, "ySZG/0EN": "GXDm`icl ", "U?": true });
-db.insert({});
-db.count();
-db.count();
-console.log(db.min("q"))
-console.log(db.data)
 
 

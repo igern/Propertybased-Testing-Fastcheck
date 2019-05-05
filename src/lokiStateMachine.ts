@@ -2,7 +2,7 @@ import { SimpleDb } from './lokiModel'
 import * as loki from "lokijs";
 import fc from 'fast-check';
 import * as assert from 'assert';
-import { ultimateObject, opject } from './ourObject';
+import { filterObjectArb } from './ourObject';
 
 class InsertCommand implements fc.Command<SimpleDb, Collection<any>>{
     constructor(readonly record: object) { }
@@ -21,9 +21,9 @@ class InsertManyCommand implements fc.Command<SimpleDb, Collection<any>>{
     constructor(readonly records: object[]) { }
     check = () => true
     run(model: SimpleDb, loki: Collection<any>): void {
-        var jiss = JSON.stringify(this.records)
-        model.insertMany(JSON.parse(jiss))
-        loki.insert(JSON.parse(jiss));
+        var jsonRecord = JSON.stringify(this.records)
+        model.insertMany(JSON.parse(jsonRecord))
+        loki.insert(JSON.parse(jsonRecord));
     }
     toString(): string {
         return `INSERTMANY(${JSON.stringify(this.records)}`
@@ -93,8 +93,8 @@ class MinCommand implements fc.Command<SimpleDb, Collection<any>>{
 }
 
 const allCommands = [
-    opject.map(v => new InsertCommand(v)),
-    fc.array(opject).map(v => new InsertManyCommand(v)),
+    filterObjectArb.map(v => new InsertCommand(v)),
+    fc.array(filterObjectArb).map(v => new InsertManyCommand(v)),
     fc.constant(new RemoveCommand()),
     fc.constant(new SizeCommand()),
     fc.constant(new MinCommand())
@@ -102,7 +102,6 @@ const allCommands = [
 
 
 describe('', () => {
-    // string text always contains itself
     it('', () => {
         fc.assert(
             fc.property(fc.commands(allCommands, 100), cmds => {
@@ -112,4 +111,3 @@ describe('', () => {
         )
     }).timeout(1000000)
 });
-//seed: 1037837345, path: "2:2:2:4:3:4:5:4:9:7", endOnFailure: true,

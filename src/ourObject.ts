@@ -1,11 +1,11 @@
-import fc, { Arbitrary, Random, Shrinkable } from 'fast-check';
+import fc, { Arbitrary } from 'fast-check';
 import { key_with_dot_and_key_empty_with_null_value_fixed, everything_with_dot_fixed } from './lokiBugs';
 
 
 
 
-export function ultimateObject(): Arbitrary<any> {
-    return dictionary(bugString(),
+export function objectArb(): Arbitrary<any> {
+    return dictionary(bugStringArb(),
         fc.oneof<any>(fc.boolean(),
             fc.integer(), fc.double(),
             fc.string(),
@@ -29,7 +29,7 @@ export function ultimateObject(): Arbitrary<any> {
     );
 }
 
-export const opject: Arbitrary<Object> = ultimateObject().filter((dic) => {
+export const filterObjectArb: Arbitrary<Object> = objectArb().filter((dic) => {
     if (key_with_dot_and_key_empty_with_null_value_fixed) {
         if (Object.keys(dic).some((key) => key.includes("."))) {
             if (dic[Object.keys(dic).find((key) => key === "")] === null) {
@@ -40,27 +40,13 @@ export const opject: Arbitrary<Object> = ultimateObject().filter((dic) => {
     return true;
 });
 
-export function bugString(): Arbitrary<string> {
+export function bugStringArb(): Arbitrary<string> {
     return everything_with_dot_fixed ? fc.string().filter((str) => !str.includes(".")) : fc.string()
 }
 
-
-// export const betterObject: Arbitrary<Object> = fc.object().filter((o) => {
-//     let returning = true
-//     if (Object.keys(o).length == 0) {
-//         returning = Math.random() > 0.5;
-//     }
-//     Object.keys(o).forEach((key) => {
-//         if (o[key] instanceof Object || o[key] instanceof Array) {
-//             returning = false;
-//         }
-//     })
-//     return returning
-// });
-
 console.log("Statistics for average length of all keys in object")
 fc.statistics(
-    ultimateObject(),
+    objectArb(),
     v => Object.keys(v).length > 0 ? Math.floor((Object.keys(v).map((key) => key.length).reduce((a, b) => a + b, 0) / Object.keys(v).length)).toString()
         : "0"
     ,
@@ -69,14 +55,13 @@ fc.statistics(
 
 console.log("Statistics for size of each object")
 fc.statistics(
-    ultimateObject(),
+    objectArb(),
     v => (Math.floor(Object.keys(v).length / 10) * 10).toString() + "-" + (Math.floor(Object.keys(v).length / 10) * 10 + 10).toString(),
     { numRuns: 1000, logger: console.log }
 );
 
-//console.log(fc.sample(fc.array(opject), 1))
 
-
+// These functions below are taken from Fast-Check documentation and slightly modified to fit our example
 function toObject<T>(items: [string, T][]): { [key: string]: T } {
     const obj: { [key: string]: T } = {};
     for (const keyValue of items) {
