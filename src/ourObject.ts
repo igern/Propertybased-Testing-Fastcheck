@@ -44,21 +44,21 @@ export function bugStringArb(): Arbitrary<string> {
     return everything_with_dot_fixed ? fc.string().filter((str) => !str.includes(".")) : fc.string()
 }
 
-console.log("Statistics for average length of all keys in object")
-fc.statistics(
-    objectArb(),
-    v => Object.keys(v).length > 0 ? Math.floor((Object.keys(v).map((key) => key.length).reduce((a, b) => a + b, 0) / Object.keys(v).length)).toString()
-        : "0"
-    ,
-    { numRuns: 1000, logger: console.log }
-);
+// console.log("Statistics for average length of all keys in object")
+// fc.statistics(
+//     objectArb(),
+//     v => Object.keys(v).length > 0 ? Math.floor((Object.keys(v).map((key) => key.length).reduce((a, b) => a + b, 0) / Object.keys(v).length)).toString()
+//         : "0"
+//     ,
+//     { numRuns: 1000, logger: console.log }
+// );
 
-console.log("Statistics for size of each object")
-fc.statistics(
-    objectArb(),
-    v => (Math.floor(Object.keys(v).length / 10) * 10).toString() + "-" + (Math.floor(Object.keys(v).length / 10) * 10 + 10).toString(),
-    { numRuns: 1000, logger: console.log }
-);
+// console.log("Statistics for size of each object")
+// fc.statistics(
+//     objectArb(),
+//     v => (Math.floor(Object.keys(v).length / 10) * 10).toString() + "-" + (Math.floor(Object.keys(v).length / 10) * 10 + 10).toString(),
+//     { numRuns: 1000, logger: console.log }
+// );
 
 
 // These functions below are taken from Fast-Check documentation and slightly modified to fit our example

@@ -32,9 +32,10 @@ class InsertManyCommand implements fc.Command<SimpleDb, Collection<any>>{
 
 class RemoveCommand implements fc.Command<SimpleDb, Collection<any>>{
     record: object;
+    constructor(readonly seed: number) { }
     check = (model: Readonly<SimpleDb>): boolean => model.count() > 0
     run(model: SimpleDb, loki: Collection<any>): void {
-        this.record = model.data[Math.round(Math.random() * (model.count() - 1))]
+        this.record = model.data[Math.round(this.seed * (model.count() - 1))]
         model.remove(this.record);
         try {
             loki.findAndRemove(this.record)
@@ -94,12 +95,11 @@ class MinCommand implements fc.Command<SimpleDb, Collection<any>>{
 
 const allCommands = [
     filterObjectArb.map(v => new InsertCommand(v)),
-    fc.array(filterObjectArb).map(v => new InsertManyCommand(v)),
-    fc.constant(new RemoveCommand()),
+    //fc.array(filterObjectArb).map(v => new InsertManyCommand(v)),
+    fc.nat().noShrink().map(s => new RemoveCommand(s)),
     fc.constant(new SizeCommand()),
-    fc.constant(new MinCommand())
+    //fc.constant(new MinCommand())
 ];
-
 
 describe('', () => {
     it('', () => {
@@ -111,3 +111,18 @@ describe('', () => {
         )
     }).timeout(1000000)
 });
+
+// let replayPath = "AC/Vg:S"
+// let seed = -1197376503
+// let path = "1:5:3:3:3:3:3:3:4:3:3:7"
+// describe('', () => {
+//     it('', () => {
+//         fc.assert(
+//             fc.property(fc.commands(allCommands, { maxCommands: 100, replayPath: replayPath }),
+//                 cmds => {
+//                     const s = () => ({ model: new SimpleDb(), real: new loki('loki.json').addCollection('testing') });
+//                     fc.modelRun(s, cmds);
+//                 }), { verbose: false, seed: seed, path: path, endOnFailure: true }
+//         )
+//     }).timeout(1000000)
+// });
