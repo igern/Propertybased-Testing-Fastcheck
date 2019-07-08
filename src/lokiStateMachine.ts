@@ -15,6 +15,9 @@ class InsertCommand implements fc.Command<SimpleDb, Collection<any>>{
     toString(): string {
         return `INSERT(${JSON.stringify(this.record)})`
     }
+    [fc.cloneMethod]() {
+        return new InsertCommand(this.record)
+    }
 }
 
 class InsertManyCommand implements fc.Command<SimpleDb, Collection<any>>{
@@ -27,6 +30,9 @@ class InsertManyCommand implements fc.Command<SimpleDb, Collection<any>>{
     }
     toString(): string {
         return `INSERTMANY(${JSON.stringify(this.records)}`
+    }
+    [fc.cloneMethod]() {
+        return new InsertManyCommand(this.records)
     }
 }
 
@@ -48,6 +54,9 @@ class RemoveCommand implements fc.Command<SimpleDb, Collection<any>>{
     toString(): string {
         return `REMOVE(${JSON.stringify(this.record)})`
     }
+    [fc.cloneMethod]() {
+        return new RemoveCommand(this.seed)
+    }
 }
 
 class SizeCommand implements fc.Command<SimpleDb, Collection<any>>{
@@ -62,6 +71,9 @@ class SizeCommand implements fc.Command<SimpleDb, Collection<any>>{
     }
     toString(): string {
         return `COUNT`
+    }
+    [fc.cloneMethod]() {
+        return new SizeCommand()
     }
 }
 
@@ -90,15 +102,17 @@ class MinCommand implements fc.Command<SimpleDb, Collection<any>>{
     toString(): string {
         return `MIN(${JSON.stringify(this.field)})`
     }
-
+    [fc.cloneMethod]() {
+        return new MinCommand()
+    }
 }
 
 const allCommands = [
     filterObjectArb.map(v => new InsertCommand(v)),
     //fc.array(filterObjectArb).map(v => new InsertManyCommand(v)),
     fc.nat().noShrink().map(s => new RemoveCommand(s)),
-    fc.constant(new SizeCommand()),
-    //fc.constant(new MinCommand())
+    fc.clonedConstant(new SizeCommand()),
+    //fc.clonedConstant(new MinCommand())
 ];
 
 describe('', () => {
