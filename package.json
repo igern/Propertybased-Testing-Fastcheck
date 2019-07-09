@@ -12,9 +12,10 @@
     "@types/lokijs": "^1.5.2",
     "@types/mocha": "^5.2.6",
     "assert": "^1.4.1",
-    "fast-check": "^1.14.0",
+    "fast-check": "^1.16.0",
     "lokijs": "^1.5.6",
     "mocha": "^6.1.4",
-    "taffy": "^2.6.2"
+    "taffy": "^2.6.2",
+    "typescript": "^3.5.2"
   }
 }
